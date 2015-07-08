@@ -51,10 +51,10 @@ function testBatchedUpdates(createStore) {
   expect(div.props.todos).to.deep.equal([ 'Use Redux', 'Use RxJS' ]);
 }
 
-describe('createConnector()', () => {
+describe('batchedUpdates()', () => {
   jsdom();
 
-  it('creates a Connector-like component using RxJS sequences', () => {
+  it('prevents extra renders after dispatches', () => {
     expect(() => testBatchedUpdates(createRedux)).to.throw();
     testBatchedUpdates(batchedUpdates(createRedux));
   });

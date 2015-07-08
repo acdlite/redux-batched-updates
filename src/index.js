@@ -1,9 +1,7 @@
-import React from 'react/addons';
-
-const { batchedUpdates } = React.addons;
+import { addons } from 'react/addons';
 
 export function batchedUpdatesMiddleware() {
-  return next => action => batchedUpdates(() => next(action));
+  return next => action => addons.batchedUpdates(() => next(action));
 }
 
 export function batchedUpdates(next) {
