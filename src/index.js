@@ -1,7 +1,9 @@
-import { addons } from 'react/addons';
+/* eslint-disable */
+import { unstable_batchedUpdates as unstableBatchedUpdates } from 'react-dom';
+/* eslint-enable */
 
 export function batchedUpdatesMiddleware() {
-  return next => action => addons.batchedUpdates(() => next(action));
+  return next => action => unstableBatchedUpdates(() => next(action));
 }
 
 export function batchedUpdates(next) {
