@@ -29,7 +29,9 @@
     "mocha": "^2.2.5",
     "mocha-jsdom": "^1.0.0",
     "react": "^0.14.0",
-    "redux": "^0.12.0",
+    "react-addons-test-utils": "^0.14.0",
+    "react-redux": "^3.1.0",
+    "redux": "^3.0.2",
     "sinon": "^1.15.4"
   },
   "peerDependencies": {
