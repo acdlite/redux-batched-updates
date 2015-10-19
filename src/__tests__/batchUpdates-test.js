@@ -1,9 +1,9 @@
 import { batchedUpdates } from '../';
 import { Provider, Connector } from 'redux/react';
 import { createRedux, bindActionCreators } from 'redux';
-import React from 'react/addons';
+import React from 'react';
 import jsdom from './jsdom';
-const { TestUtils } = React.addons;
+import TestUtils from 'react-addons-test-utils';
 import { spy } from 'sinon';
 
 const actionCreators = {
@@ -12,7 +12,7 @@ const actionCreators = {
   }
 };
 
-function todoReducer(state = { todos: [] }, action) {
+function todoReducer(state = { todos: [] }, action = {}) {
   return action.type === 'ADD_TODO'
     ? { ...state, todos: [...state.todos, action.payload] }
     : state;
@@ -29,8 +29,8 @@ function testBatchedUpdates(createStore) {
         {() =>
           <Connector select={({ todos }) => ({ ...todos, f: () => {} })}>
             {({ dispatch, ...props }) => {
-              renderSpy();
               const { addTodo } = bindActionCreators(actionCreators, dispatch);
+              renderSpy(props.todos, addTodo);
               return <div {...props} addTodo={addTodo} />;
             }}
           </Connector>
@@ -41,14 +41,23 @@ function testBatchedUpdates(createStore) {
   );
 
   const div = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+
+  let todos = null;
+  let addTodo = null;
+
   expect(renderSpy.callCount).to.equal(1);
-  expect(div.props.todos).to.deep.equal([]);
-  div.props.addTodo('Use Redux');
+  ([todos, addTodo] = renderSpy.getCall(0).args);
+  expect(todos).to.deep.equal([]);
+
+  addTodo('Use Redux');
   expect(renderSpy.callCount).to.equal(2);
-  expect(div.props.todos).to.deep.equal([ 'Use Redux' ]);
-  div.props.addTodo('Use RxJS');
+  ([todos, addTodo] = renderSpy.getCall(1).args);
+  expect(todos).to.deep.equal([ 'Use Redux' ]);
+
+  addTodo('Use RxJS');
   expect(renderSpy.callCount).to.equal(3);
-  expect(div.props.todos).to.deep.equal([ 'Use Redux', 'Use RxJS' ]);
+  ([todos] = renderSpy.getCall(2).args);
+  expect(todos).to.deep.equal([ 'Use Redux', 'Use RxJS' ]);
 }
 
 describe('batchedUpdates()', () => {
