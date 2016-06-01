@@ -6,6 +6,8 @@ redux-batched-updates
 
 Batch React updates that occur as a result of Redux dispatches, to prevent cascading renders. See https://github.com/gaearon/redux/issues/125 for more details.
 
+Requires React 0.12+.
+
 ```js
 npm install --save redux-batched-updates
 ```
